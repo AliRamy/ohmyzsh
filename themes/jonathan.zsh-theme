@@ -3,11 +3,7 @@ functions rbenv_prompt_info >& /dev/null || rbenv_prompt_info(){}
 function theme_precmd {
     local TERMWIDTH
     (( TERMWIDTH = ${COLUMNS} - 1 ))
-
-
-    ###
     # Truncate the path if it's too long.
-
     PR_FILLBAR=""
     PR_PWDLEN=""
 
@@ -24,7 +20,6 @@ function theme_precmd {
 
 }
 
-
 setopt extended_glob
 theme_preexec () {
     if [[ "$TERM" == "screen" ]]; then
@@ -35,15 +30,9 @@ theme_preexec () {
 
 
 setprompt () {
-    ###
     # Need this so the prompt will work.
-
     setopt prompt_subst
-
-
-    ###
     # See if we can use colors.
-
     autoload zsh/terminfo
     for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE GREY; do
         eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
@@ -51,25 +40,20 @@ setprompt () {
         (( count = $count + 1 ))
     done
     PR_NO_COLOUR="%{$terminfo[sgr0]%}"
-
-    ###
     # Modify Git prompt
     ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[red]%}    "
     ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-    ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}  "
-    ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[yellow]%} 烙"
+    ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}  "
+    ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[yellow]%} "
 
-    ZSH_THEME_GIT_PROMPT_ADDED=""
+    ZSH_THEME_GIT_PROMPT_ADDED="烙"
     ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[blue]%}"
-    ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}  "
-    ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} "
-    ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
+    ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}  "
+    ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} 凜 "
+    ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} "
     ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}  "
-
-    ###
     # See if we can use extended characters to look nicer.
     # UTF-8 Fixed
-
     if [[ $(locale charmap) == "UTF-8" ]]; then
         PR_SET_CHARSET=""
         PR_SHIFT_IN=""
@@ -92,11 +76,7 @@ setprompt () {
         PR_LRCORNER='$PR_SHIFT_IN${altchar[j]:--}$PR_SHIFT_OUT'
         PR_URCORNER='$PR_SHIFT_IN${altchar[k]:--}$PR_SHIFT_OUT'
      fi
-
-
-    ###
     # Decide if we need to set titlebar text.
-
     case $TERM in
     xterm*)
         PR_TITLEBAR=$'%{\e]0;%(!.-=*[ROOT]*=- | .)%n@%m:%~ | ${COLUMNS}x${LINES} | %y\a%}'
@@ -108,20 +88,13 @@ setprompt () {
         PR_TITLEBAR=''
         ;;
     esac
-
-
-    ###
     # Decide whether to set a screen title
     if [[ "$TERM" == "screen" ]]; then
         PR_STITLE=$'%{\ekzsh\e\\%}'
     else
         PR_STITLE=''
     fi
-
-
-    ###
     # Finally, the prompt.
-
     PROMPT='$PR_SET_CHARSET$PR_STITLE${(e)PR_TITLEBAR}\
 $PR_CYAN$PR_ULCORNER$PR_HBAR$PR_GREY(\
 $PR_GREEN%$PR_PWDLEN<...<%~%<<\
@@ -134,7 +107,6 @@ $PR_YELLOW%D{%H:%M:%S}\
 $PR_LIGHT_BLUE%{$reset_color%}`git_prompt_info``git_prompt_status`$PR_BLUE)$PR_CYAN$PR_HBAR\
 $PR_HBAR\
 >$PR_NO_COLOUR '
-
     # display exitcode on the right when >0
     return_code="%(?..%{$fg[red]%}%? ↵ %{$reset_color%})"
     RPROMPT=' $return_code$PR_CYAN$PR_HBAR$PR_BLUE$PR_HBAR\
@@ -145,7 +117,6 @@ $PR_BLUE$PR_HBAR(\
 $PR_LIGHT_GREEN%_$PR_BLUE)$PR_HBAR\
 $PR_CYAN$PR_HBAR$PR_NO_COLOUR '
 }
-
 setprompt
 
 autoload -U add-zsh-hook
