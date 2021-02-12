@@ -1,1 +1,0 @@
-/Users/aliramy/guezwhoz-scheme/guezwhoz.zsh-theme
